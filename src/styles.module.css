@@ -1,0 +1,114 @@
+.playerContainer button {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s linear;
+}
+
+.playerContainer button:hover {
+  opacity: 0.5;
+  transition: 0.2s linear;
+}
+
+.playerContainer {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+}
+
+.playerProgressRange {
+  width: 100%;
+}
+
+.playerVideo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #00000063;
+}
+
+.playerControls {
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  width: 100%;
+  background: #00000063;
+  padding-top: 8px;
+}
+
+.playerControlsMainWrapper {
+  width: 100%;
+  max-width: 97%;
+  margin: auto;
+  position: relative;
+  left: -3px;
+}
+
+.playerControlsWrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 3px 0;
+  justify-content: space-between;
+}
+
+.playerControlIcons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.playerDuration {
+  color: #fff;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.playerQualitySelector {
+  background-color: transparent;
+  color: #fff;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+.playerContainerOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #0f0f0f94;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.playerContainerOverlaySpinner {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.playerLogMessageContainerOverlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  top: -40px;
+}
