@@ -6,7 +6,16 @@ export interface IProPlayerProps {
     theme?: string
     showControls?: boolean
     title?: string
+    drmSystemConfig?: TDrmSystemConfig
 }
+
+type TDrmSystemConfig = {
+    [systemId: string]: {
+        licenseUrl: string;
+        serverCertificateUrl?: string;
+    };
+};
+
 
 export interface IHTMLVideoElement extends HTMLVideoElement {
     hls: any
