@@ -150,6 +150,16 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, isS
             setIsPlaying(false)
         })
 
+        video.addEventListener('waiting', () => {
+            console.log('waiting')
+            setLoading(true)
+        })
+
+        video.addEventListener('canplaythrough', () => {
+            console.log('done waiting')
+            setLoading(false)
+        })
+
         //*
         // video.addEventListener('loadstart', () => {
         //     console.log('Video is loading...');
