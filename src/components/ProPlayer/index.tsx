@@ -6,8 +6,10 @@ import { BiInfoSquare, BiLoader, BiPause, BiPlay } from "react-icons/bi"
 import { MdFullscreen, MdOutlineForward10, MdReplay10 } from "react-icons/md"
 import { ImVolumeMedium, ImVolumeLow, ImVolumeMute, ImVolumeHigh } from "react-icons/im"
 import styles from "../../styles.module.css"
+import { formatDuration } from "../../utils/formatDuration.util"
+// import { showLogMessage } from "../../utils/showLogMessage.util"
 
-const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, showLogs, isStaticVideo, poster }) => {
+const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, isStaticVideo, poster }) => {
     const videoRef = React.useRef<IHTMLVideoElement>(null)
     const [isPlaying, setIsPlaying] = React.useState<boolean>(false)
     const [loading, setLoading] = React.useState<boolean>(true)
@@ -51,7 +53,7 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, sho
         const video = videoRef.current
 
         if (!video) {
-            showLogMessage("video element not mounted on DOM", 'ERROR')
+            // showLogMessage(showLogs, "video element not mounted on DOM", 'ERROR')
             return
         }
 
@@ -63,7 +65,7 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, sho
             if (Hls.isSupported()) {
                 const hls = new Hls()
 
-                showLogMessage("hls supported", 'LOG')
+                // showLogMessage(showLogs, "hls supported", 'LOG')
 
                 video.hls = hls
 
@@ -88,7 +90,7 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, sho
         setSelectedQuality(newQuality)
 
         if (!video) {
-            showLogMessage('video element not mounted on DOM', 'ERROR')
+            // showLogMessage('video element not mounted on DOM', 'ERROR')
             return
         }
 
@@ -120,15 +122,15 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, sho
         const video = videoRef.current
 
         if (!video) {
-            showLogMessage("video element not mounted on DOM", 'ERROR')
+            // showLogMessage(showLogs, "video element not mounted on DOM", 'ERROR')
             return
         }
 
-        showLogMessage('loading metadata...', 'LOG')
+        // showLogMessage(showLogs, 'loading metadata...', 'LOG')
 
         video.addEventListener('loadedmetadata', () => {
             setIsPlaying(video.paused)
-            setDuration(formatTime(video.duration))
+            setDuration(formatDuration(video.duration))
             setDurationInt(video.duration)
             setLoading(false)
             console.log(video.volume)
@@ -138,9 +140,9 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, sho
         })
 
         video.addEventListener("timeupdate", () => {
-            // setCurrentTime(formatTime(video.currentTime))
+            // setCurrentTime(formatDuration(video.currentTime))
             setCurrentTimeInt(video.currentTime)
-            setRemainingDuration(formatTime(video.duration - video.currentTime))
+            setRemainingDuration(formatDuration(video.duration - video.currentTime))
             // setRemainingDurationInt((video.duration - video.currentTime))
         })
 
@@ -161,14 +163,6 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, sho
         // });
     }
 
-    function showLogMessage(logMessage_: string, logType?: string) {
-        if (showLogs === true) {
-            if (logType === "ERROR") console.error(logMessage_)
-            if (logType === "WARN") console.warn(logMessage_)
-            else console.log(logMessage_)
-        }
-    }
-
     // function listenForMouseMoveOverVideoElement() {
     //     const videoPlayerElement = document.querySelector('.playerVideo')
 
@@ -187,24 +181,11 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, sho
     //     return () => { clearTimeout(timeoutId) }
     // }
 
-    function formatTime(seconds: number) {
-        const hours = Number((Math.floor(seconds / 3600)).toFixed(0))
-        const minutes = Number(Math.floor((seconds - hours * 3600) / 60).toFixed(0))
-        const remainingSeconds = Number((seconds - hours * 3600 - minutes * 60).toFixed(0))
-
-        return (
-            (hours > 0 ? hours + ":" : "") +
-            (minutes < 10 ? "0" + minutes : minutes) +
-            ":" +
-            (remainingSeconds < 10 ? "0" + remainingSeconds : remainingSeconds)
-        )
-    }
-
     const handlePlayPause = () => {
         const video = videoRef.current
 
         if (!video) {
-            showLogMessage('video element not mounted on DOM', 'ERROR')
+            // showLogMessage(showLogs, 'video element not mounted on DOM', 'ERROR')
             return
         }
 
@@ -217,7 +198,7 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, sho
         const video = videoRef.current
 
         if (!video) {
-            showLogMessage("video element not mounted on DOM", 'ERROR')
+            // showLogMessage(showLogs, "video element not mounted on DOM", 'ERROR')
             return
         }
 
@@ -229,7 +210,7 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, sho
         const video = videoRef.current
 
         if (!video) {
-            showLogMessage('video element not mounted on DOM', 'ERROR')
+            // showLogMessage(showLogs, 'video element not mounted on DOM', 'ERROR')
             return
         }
 
@@ -243,7 +224,7 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, sho
         const video = videoRef.current
 
         if (!video) {
-            showLogMessage('video element not mounted on DOM', 'ERROR')
+            // showLogMessage(showLogs, 'video element not mounted on DOM', 'ERROR')
             return
         }
 
@@ -251,8 +232,8 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, sho
 
         setCurrentTimeInt(seekTime)
         setCurrentTimeInt(video.currentTime)
-        setRemainingDuration(formatTime(video.duration - video.currentTime))
-        // setCurrentTime(formatTime(seekTime))
+        setRemainingDuration(formatDuration(video.duration - video.currentTime))
+        // setCurrentTime(formatDuration(seekTime))
     }
 
     const onVideoElementHover = () => {
@@ -264,14 +245,13 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, sho
         const volumeLevel_ = Number(event.target.value) / 100
 
         if (!video) {
-            showLogMessage('video element not mounted on DOM', 'ERROR')
+            // showLogMessage(showLogs, 'video element not mounted on DOM', 'ERROR')
             return
         }
 
         setVolumeLevel(volumeLevel_ * 100)
         video.volume = volumeLevel_
     }
-
 
     return (
         <div>
