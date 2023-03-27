@@ -4,12 +4,12 @@ import { SUPPORTED_MIME_TYPES } from "../../constants"
 import { IHTMLVideoElement, IProPlayerProps } from "../../types"
 import { BiInfoSquare, BiLoader, BiPause, BiPlay } from "react-icons/bi"
 import { MdFullscreen, MdOutlineForward10, MdReplay10 } from "react-icons/md"
-import { ImVolumeMedium, ImVolumeLow, ImVolumeMute, ImVolumeHigh } from "react-icons/im"
-import styles from "../../styles.module.css"
+import { ImVolumeMedium, ImVolumeLow, ImVolumeHigh, ImVolumeMute2 } from "react-icons/im"
 import { formatDuration } from "../../utils/formatDuration.util"
+import styles from "../../styles.module.css"
 // import { showLogMessage } from "../../utils/showLogMessage.util"
 
-const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, isStaticVideo, poster }) => {
+const ProPlayer: React.FC<IProPlayerProps> = ({ drmSystemConfig, title, source, showControls, isStaticVideo, poster }) => {
     const videoRef = React.useRef<IHTMLVideoElement>(null)
     const [isPlaying, setIsPlaying] = React.useState<boolean>(false)
     const [loading, setLoading] = React.useState<boolean>(true)
@@ -61,9 +61,10 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, isS
 
         if (isStaticVideo) {
             listenForVideoPlayerEvents()
-        } else { // set up player for HLS URL
+        } else {
+            // set up player for HLS URL
             if (Hls.isSupported()) {
-                const hls = new Hls()
+                const hls = new Hls({ drmSystems: drmSystemConfig })
 
                 // showLogMessage(showLogs, "hls supported", 'LOG')
 
@@ -94,15 +95,6 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, isS
             return
         }
 
-        //*
-        // video.addEventListener('loadstart', () => {
-        //     setLoading(true)
-        // })
-        //*
-        // video.addEventListener('canplaythrough', () => {
-        //     setLoading(false)
-        // })
-
         if (video.readyState === video.HAVE_ENOUGH_DATA) {
             const hls = video.hls
 
@@ -110,12 +102,6 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, isS
                 hls.currentLevel = newQuality
             }
         }
-
-        //*
-        // return () => {
-        //     video.removeEventListener('loadstart', handleLoadStart);
-        //     video.removeEventListener('canplaythrough', handleCanPlayThrough);
-        // };
     }
 
     function listenForVideoPlayerEvents() {
@@ -133,17 +119,13 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, isS
             setDuration(formatDuration(video.duration))
             setDurationInt(video.duration)
             setLoading(false)
-            console.log(video.volume)
-
-            video.volume = 30 / 100
             setVolumeLevel(30)
+            video.volume = 30 / 100
         })
 
         video.addEventListener("timeupdate", () => {
-            // setCurrentTime(formatDuration(video.currentTime))
             setCurrentTimeInt(video.currentTime)
             setRemainingDuration(formatDuration(video.duration - video.currentTime))
-            // setRemainingDurationInt((video.duration - video.currentTime))
         })
 
         video.addEventListener("ended", () => {
@@ -151,26 +133,17 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, isS
         })
 
         video.addEventListener('waiting', () => {
-            console.log('waiting')
             setLoading(true)
         })
 
         video.addEventListener('canplaythrough', () => {
-            console.log('done waiting')
             setLoading(false)
         })
 
-        //*
-        // video.addEventListener('loadstart', () => {
-        //     console.log('Video is loading...');
-        //     setLoading(true)
-        // });
-
-        //*
-        // video.addEventListener('loadeddata', () => {
-        //     console.log('Video has finished loading.');
-        //     setLoading(false)
-        // });
+        // return () => {
+        //     video.removeEventListener('loadstart', handleLoadStart);
+        //     video.removeEventListener('canplaythrough', handleCanPlayThrough);
+        // };
     }
 
     // function listenForMouseMoveOverVideoElement() {
@@ -304,7 +277,7 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, isS
                                         <div className={styles.playerVolumeColWrapper} onMouseLeave={() => setShowVolumeSlider(false)} onMouseEnter={() => setShowVolumeSlider(true)} onClick={() => setShowVolumeSlider(true)} >
                                             {volumeLevel > 0 && volumeLevel < 70 && <button><ImVolumeLow size={26} /></button>}
                                             {volumeLevel >= 70 && volumeLevel < 100 && <button><ImVolumeMedium size={26} /></button>}
-                                            {volumeLevel === 0 && <button><ImVolumeMute size={26} /></button>}
+                                            {volumeLevel === 0 && <button><ImVolumeMute2 size={26} /></button>}
                                             {volumeLevel === 100 && <button><ImVolumeHigh size={26} /></button>}
                                             {showVolumeSlider && <input type="range" value={volumeLevel} onChange={handleChangeVolume} className={styles.playerVolumeProgressRange} />}
                                         </div>
@@ -315,7 +288,7 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, isS
                                             <select value={selectedQuality} onChange={handleQualityChange} className={styles.playerQualitySelector}>
                                                 {qualities.map((quality, index) => (
                                                     <option key={index} value={index}>
-                                                        {quality}
+                                                        {quality}p
                                                     </option>
                                                 ))}
                                             </select>
