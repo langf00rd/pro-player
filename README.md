@@ -1,6 +1,6 @@
 # Pro Player
 
-> An advanced React video player component that allows you to play HLS (m3u8) files. It provides a customizable video player with lots of features including a quality selector.
+> An advanced React video player component that allows you to play HLS (m3u8) files and supports DRM. It provides a customizable video player with lots of features including a quality selector.
 
 [![NPM](https://img.shields.io/npm/v/pro-player.svg)](https://www.npmjs.com/package/pro-player) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
@@ -30,7 +30,7 @@ import ProPlayer from 'pro-player'
 import 'pro-player/dist/index.css'
 ```
 
-Then, you can use the ProPlayer component in your app by passing in the src and poster props:
+Then, you can use the ProPlayer component in your app by passing in the source, poster, drmSystemConfig, etc props:
 
 ```jsx
 const App = () => {
@@ -38,7 +38,6 @@ const App = () => {
     <ProPlayer
       source='HLS_URL'
       poster='POSTER_URL'
-      title='Tears of steel'
       drmSystemConfig={{
         'com.apple.fps': {
           licenseUrl: 'LICENSE_URL',
