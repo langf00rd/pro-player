@@ -13,12 +13,10 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, sho
     const [loading, setLoading] = React.useState<boolean>(true)
     const [showControls_, setShowControls_] = React.useState<boolean>(true)
     const [showVolumeSlider, setShowVolumeSlider] = React.useState<boolean>(false)
-    // const [, setCurrentTime] = React.useState<string>('00:00')
     const [currentTimeInt, setCurrentTimeInt] = React.useState<number>(0)
     const [durationInt, setDurationInt] = React.useState<number>(0)
     const [duration, setDuration] = React.useState<string>('00:00')
     const [remainingduration, setRemainingDuration] = React.useState<string>('00:00')
-    // const [, setRemainingDurationInt] = React.useState<number>(0)
     const [logMessage, setLogMessage] = React.useState<string>('00:00')
     const [isFullScreen, setIsFullScreen] = React.useState<boolean>(false)
     const [selectedQuality, setSelectedQuality] = React.useState<number>(0)
@@ -33,14 +31,6 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, sho
         if (showControls) setShowControls_(true)
         else setShowControls_(false)
     }, [showControls])
-
-    // React.useEffect(() => {
-    //     listenForMouseMoveOverVideoElement()
-    // }, [])
-
-    // React.useEffect(() => {
-    //     toggleShowVideoControls()
-    // }, [showControls_])
 
     function onPlayerLoad() {
         if (!source) {
@@ -92,15 +82,6 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, sho
             return
         }
 
-        //*
-        // video.addEventListener('loadstart', () => {
-        //     setLoading(true)
-        // })
-        //*
-        // video.addEventListener('canplaythrough', () => {
-        //     setLoading(false)
-        // })
-
         if (video.readyState === video.HAVE_ENOUGH_DATA) {
             const hls = video.hls
 
@@ -108,12 +89,6 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, sho
                 hls.currentLevel = newQuality
             }
         }
-
-        //*
-        // return () => {
-        //     video.removeEventListener('loadstart', handleLoadStart);
-        //     video.removeEventListener('canplaythrough', handleCanPlayThrough);
-        // };
     }
 
     function listenForVideoPlayerEvents() {
@@ -138,27 +113,13 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, sho
         })
 
         video.addEventListener("timeupdate", () => {
-            // setCurrentTime(formatTime(video.currentTime))
             setCurrentTimeInt(video.currentTime)
             setRemainingDuration(formatTime(video.duration - video.currentTime))
-            // setRemainingDurationInt((video.duration - video.currentTime))
         })
 
         video.addEventListener("ended", () => {
             setIsPlaying(false)
         })
-
-        //*
-        // video.addEventListener('loadstart', () => {
-        //     console.log('Video is loading...');
-        //     setLoading(true)
-        // });
-
-        //*
-        // video.addEventListener('loadeddata', () => {
-        //     console.log('Video has finished loading.');
-        //     setLoading(false)
-        // });
     }
 
     function showLogMessage(logMessage_: string, logType?: string) {
@@ -168,24 +129,6 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, sho
             else console.log(logMessage_)
         }
     }
-
-    // function listenForMouseMoveOverVideoElement() {
-    //     const videoPlayerElement = document.querySelector('.playerVideo')
-
-    //     if (!videoPlayerElement) return
-
-    //     videoPlayerElement.addEventListener('mousemove', () => {
-    //         setShowControls_(true)
-    //     })
-    // }
-
-    // function toggleShowVideoControls() {
-    //     const timeoutId = setTimeout(() => {
-    //         // setShowControls_(false)
-    //     }, 5000)
-
-    //     return () => { clearTimeout(timeoutId) }
-    // }
 
     function formatTime(seconds: number) {
         const hours = Number((Math.floor(seconds / 3600)).toFixed(0))
@@ -252,11 +195,9 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, sho
         setCurrentTimeInt(seekTime)
         setCurrentTimeInt(video.currentTime)
         setRemainingDuration(formatTime(video.duration - video.currentTime))
-        // setCurrentTime(formatTime(seekTime))
     }
 
     const onVideoElementHover = () => {
-        // setShowControls_(true)
     }
 
     const handleChangeVolume = (event: ChangeEvent<HTMLInputElement>) => {
@@ -271,7 +212,6 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ title, source, showControls, sho
         setVolumeLevel(volumeLevel_ * 100)
         video.volume = volumeLevel_
     }
-
 
     return (
         <div>
