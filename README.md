@@ -36,8 +36,18 @@ Then, you can use the ProPlayer component in your app by passing in the src and 
 const App = () => {
   return (
     <ProPlayer
-      poster='http://cdn.bongobd.com/upload/content/landscape/hd/O1rJFgE8KTD.jpg'
-      source='https://live-par-2-abr.livepush.io/vod/bigbuckbunny/index.m3u8'
+      source='HLS_URL'
+      poster='POSTER_URL'
+      title='Tears of steel'
+      drmSystemConfig={{
+        'com.apple.fps': {
+          licenseUrl: 'LICENSE_URL',
+          serverCertificateUrl: 'SERVER_CERTIFICATE_URL'
+        },
+        'com.widevine.alpha': {
+          licenseUrl: 'LICENSE_URL'
+        }
+      }}
     />
   )
 }

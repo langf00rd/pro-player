@@ -4,6 +4,7 @@ import 'pro-player/dist/index.css'
 
 const App = () => {
   return <ProPlayer
+    source='https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8'
     poster='http://cdn.bongobd.com/upload/content/landscape/hd/O1rJFgE8KTD.jpg'
     isStaticVideo={false}
     showLogs={true}
@@ -20,7 +21,6 @@ const App = () => {
         }
       }
     }
-    source='https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8'
   />
 }
 
