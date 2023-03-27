@@ -7,6 +7,8 @@ const App = () => {
     poster='http://cdn.bongobd.com/upload/content/landscape/hd/O1rJFgE8KTD.jpg'
     isStaticVideo={false}
     showLogs={true}
+    title="Big Buck Bunny"
+    showControls
     source='https://live-par-2-abr.livepush.io/vod/bigbuckbunny/index.m3u8'
   />
 }

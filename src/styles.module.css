@@ -1,10 +1,18 @@
+input[type='range'] {
+  height: 4px;
+}
+
+.playerContainer * {
+  outline: none;
+}
+
 .playerContainer button {
   border: none;
   outline: none;
   background: transparent;
-  color: white;
   cursor: pointer;
   transition: 0.2s linear;
+  color: white;
 }
 
 .playerContainer button:hover {
@@ -17,9 +25,24 @@
   width: 100%;
   overflow: hidden;
   padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  color: white;
+}
+
+.playerProgressRangeWrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 5;
+  margin-top: -15px;
+  /* background: red; */
 }
 
 .playerProgressRange {
+  width: 100%;
+  margin-right: 10px;
+}
+
+.playerVolumeProgressRange {
   width: 100%;
 }
 
@@ -38,7 +61,8 @@
   left: 0;
   width: 100%;
   background: #00000063;
-  padding-top: 8px;
+  padding: 10px 0;
+  /* padding-top: 8px; */
 }
 
 .playerControlsMainWrapper {
@@ -47,14 +71,17 @@
   margin: auto;
   position: relative;
   left: -3px;
+  /* background: red; */
 }
 
 .playerControlsWrapper {
   display: flex;
   align-items: center;
   gap: 20px;
-  padding: 3px 0;
+  /* padding: 3px 0; */
+  margin-top: -10px;
   justify-content: space-between;
+  /* background: green; */
 }
 
 .playerControlIcons {
@@ -64,7 +91,7 @@
 }
 
 .playerDuration {
-  color: #fff;
+  /* color: #fff; */
   font-size: 14px;
   display: flex;
   align-items: center;
@@ -72,10 +99,11 @@
 
 .playerQualitySelector {
   background-color: transparent;
-  color: #fff;
+  /* color: #fff; */
   font-size: 14px;
   border: none;
   cursor: pointer;
+  color: white;
 }
 
 .playerContainerOverlay {
@@ -89,7 +117,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  /* color: white; */
 }
 
 .playerContainerOverlaySpinner {
@@ -111,4 +139,21 @@
   justify-content: center;
   position: relative;
   top: -40px;
+}
+
+.playerControlCol {
+  display: flex;
+  align-items: center;
+}
+
+.playerVolumeColWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (max-width: 700px) {
+  .playerTitle {
+    display: none;
+  }
 }
