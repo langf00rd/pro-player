@@ -101,6 +101,7 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ drmSystemConfig, videoTitle, sou
         video.addEventListener('loadedmetadata', () => {
             setTimeout(() => {
                 video.muted = videoProps.muted || false
+                video.volume = 30 / 100
 
                 if (videoProps.autoPlay === true) {
                     document.body.addEventListener('load', function () {
@@ -113,8 +114,7 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ drmSystemConfig, videoTitle, sou
                 setDurationInt(video.duration)
                 setLoading(false)
                 setVolumeLevel(30)
-                video.volume = 30 / 100
-            }, 2000)
+            }, 1000)
         })
 
         video.addEventListener('timeupdate', () => {
@@ -194,6 +194,7 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ drmSystemConfig, videoTitle, sou
         if (!video) return
 
         setVolumeLevel(volumeLevel_ * 100)
+        video.muted = false
         video.volume = volumeLevel_
     }
 
