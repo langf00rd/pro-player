@@ -10,7 +10,7 @@ const App = () => {
     showLogs={true}
     videoTitle="Tears of steel"
     showControls={true}
-    autoPlay={true}
+    autoPlay={false}
     muted={true}
     drmSystemConfig={
       {

@@ -5,6 +5,7 @@ import { IHTMLVideoElement, IProPlayerProps } from '../../types'
 import { BiInfoSquare, BiLoader } from 'react-icons/bi'
 import { IoPause, IoPlay } from 'react-icons/io5'
 import { MdOutlineForward10, MdReplay10 } from 'react-icons/md'
+import { BsFillPipFill } from 'react-icons/bs'
 import { RxEnterFullScreen } from 'react-icons/rx'
 import { ImVolumeMedium, ImVolumeLow, ImVolumeHigh, ImVolumeMute2 } from 'react-icons/im'
 import { formatDuration } from '../../utils/formatDuration.util'
@@ -47,7 +48,7 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ drmSystemConfig, videoTitle, sou
         if (!video) return
 
         if (!source) {
-            setLogMessage('video source not provided')
+            setLogMessage('Invalid video source')
             return
         } else setLogMessage('')
 
@@ -198,6 +199,13 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ drmSystemConfig, videoTitle, sou
         video.volume = volumeLevel_
     }
 
+    const handlePiP = () => {
+        const video = videoRef.current
+        if (!video) return
+
+        video.requestPictureInPicture()
+    }
+
     return (
         <div>
             <div className={styles.playerContainer}>
@@ -238,6 +246,7 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ drmSystemConfig, videoTitle, sou
                                                     : <button><IoPlay size={30} /></button>}
                                             </span>
                                         </div>
+                                        <button><BsFillPipFill onClick={handlePiP} size={25} /></button>
                                         <button><MdReplay10 onClick={() => handleForwardRewind('REWIND')} size={30} /></button>
                                         <button><MdOutlineForward10 onClick={() => handleForwardRewind('FORWARD')} size={30} /></button>
                                         <div className={styles.playerVolumeColWrapper} onMouseLeave={() => setShowVolumeSlider(false)} onMouseEnter={() => setShowVolumeSlider(true)} onClick={() => setShowVolumeSlider(true)} >
