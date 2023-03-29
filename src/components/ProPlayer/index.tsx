@@ -200,10 +200,14 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ drmSystemConfig, videoTitle, sou
     }
 
     const handlePiP = () => {
-        const video = videoRef.current
-        if (!video) return
-
-        video.requestPictureInPicture()
+        try {
+            const video = videoRef.current
+            if (!video) return
+            video.requestPictureInPicture()
+        } catch (error) {
+            console.error(error)
+            alert('Could not activate picture-in-picture mode')
+        }
     }
 
     return (
