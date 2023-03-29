@@ -1,16 +1,16 @@
-import Hls from "hls.js"
-import React, { ChangeEvent } from "react"
-import { SUPPORTED_MIME_TYPES } from "../../constants"
-import { IHTMLVideoElement, IProPlayerProps } from "../../types"
-import { BiInfoSquare, BiLoader } from "react-icons/bi"
-import { IoPause, IoPlay } from "react-icons/io5"
-import { MdOutlineForward10, MdReplay10 } from "react-icons/md"
-import { RxEnterFullScreen } from "react-icons/rx"
-import { ImVolumeMedium, ImVolumeLow, ImVolumeHigh, ImVolumeMute2 } from "react-icons/im"
-import { formatDuration } from "../../utils/formatDuration.util"
-import styles from "../../styles.module.css"
+import Hls from 'hls.js'
+import React, { ChangeEvent } from 'react'
+import { SUPPORTED_MIME_TYPES } from '../../constants'
+import { IHTMLVideoElement, IProPlayerProps } from '../../types'
+import { BiInfoSquare, BiLoader } from 'react-icons/bi'
+import { IoPause, IoPlay } from 'react-icons/io5'
+import { MdOutlineForward10, MdReplay10 } from 'react-icons/md'
+import { RxEnterFullScreen } from 'react-icons/rx'
+import { ImVolumeMedium, ImVolumeLow, ImVolumeHigh, ImVolumeMute2 } from 'react-icons/im'
+import { formatDuration } from '../../utils/formatDuration.util'
+import styles from '../../styles.module.css'
 
-const ProPlayer: React.FC<IProPlayerProps> = ({ muted, autoPlay, drmSystemConfig, title, source, showControls, isStaticVideo, poster }) => {
+const ProPlayer: React.FC<IProPlayerProps> = ({ drmSystemConfig, videoTitle, source, showControls, isStaticVideo, ...videoProps }) => {
     const videoRef = React.useRef<IHTMLVideoElement>(null)
     const [isPlaying, setIsPlaying] = React.useState<boolean>(false)
     const [loading, setLoading] = React.useState<boolean>(true)
@@ -42,29 +42,23 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ muted, autoPlay, drmSystemConfig
     }, [showControls_])
 
     function onPlayerLoad() {
+        const video = videoRef.current
+
+        if (!video) return
+
         if (!source) {
             setLogMessage('video source not provided')
             return
         } else setLogMessage('')
 
-        const video = videoRef.current
-
-        if (!video) {
-            // showLogMessage(showLogs, "video element not mounted on DOM", 'ERROR')
-            return
-        }
-
         setLoading(true)
 
-        if (isStaticVideo) {
-            listenForVideoPlayerEvents()
-        } else {
+        if (isStaticVideo) listenForVideoPlayerEvents()
+        else {
             // set up player for HLS URL
+
             if (Hls.isSupported()) {
-
                 const hls = new Hls({ drmSystems: drmSystemConfig })
-
-                // showLogMessage(showLogs, "hls supported", 'LOG')
 
                 video.hls = hls
 
@@ -88,10 +82,7 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ muted, autoPlay, drmSystemConfig
 
         setSelectedQuality(newQuality)
 
-        if (!video) {
-            // showLogMessage('video element not mounted on DOM', 'ERROR')
-            return
-        }
+        if (!video) return
 
         if (video.readyState === video.HAVE_ENOUGH_DATA) {
             const hls = video.hls
@@ -105,19 +96,13 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ muted, autoPlay, drmSystemConfig
     function listenForVideoPlayerEvents() {
         const video = videoRef.current
 
-        if (!video) {
-            // showLogMessage(showLogs, "video element not mounted on DOM", 'ERROR')
-            return
-        }
-
-        // showLogMessage(showLogs, 'loading metadata...', 'LOG')
+        if (!video) return
 
         video.addEventListener('loadedmetadata', () => {
             setTimeout(() => {
-                if (autoPlay === true) {
-                    video.muted = muted || false
-                    // video.play()
+                video.muted = videoProps.muted || false
 
+                if (videoProps.autoPlay === true) {
                     document.body.addEventListener('load', function () {
                         video.play()
                     })
@@ -129,17 +114,15 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ muted, autoPlay, drmSystemConfig
                 setLoading(false)
                 setVolumeLevel(30)
                 video.volume = 30 / 100
-            }, 2000);
-
-
+            }, 2000)
         })
 
-        video.addEventListener("timeupdate", () => {
+        video.addEventListener('timeupdate', () => {
             setCurrentTimeInt(video.currentTime)
             setRemainingDuration(formatDuration(video.duration - video.currentTime))
         })
 
-        video.addEventListener("ended", () => {
+        video.addEventListener('ended', () => {
             setIsPlaying(false)
         })
 
@@ -152,8 +135,8 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ muted, autoPlay, drmSystemConfig
         })
 
         // return () => {
-        //     video.removeEventListener('loadstart', handleLoadStart);
-        //     video.removeEventListener('canplaythrough', handleCanPlayThrough);
+        //     video.removeEventListener('timeupdate', timeUpdateEvent);
+        //     video.removeEventListener('ended', endedEvent);
         // };
     }
 
@@ -165,10 +148,7 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ muted, autoPlay, drmSystemConfig
     const handlePlayPause = () => {
         const video = videoRef.current
 
-        if (!video) {
-            // showLogMessage(showLogs, 'video element not mounted on DOM', 'ERROR')
-            return
-        }
+        if (!video) return
 
         if (isPlaying) video.pause()
         else video.play()
@@ -178,22 +158,16 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ muted, autoPlay, drmSystemConfig
     const handleForwardRewind = (actionType: string) => {
         const video = videoRef.current
 
-        if (!video) {
-            // showLogMessage(showLogs, "video element not mounted on DOM", 'ERROR')
-            return
-        }
+        if (!video) return
 
-        if (actionType === "FORWARD") video.currentTime += 10
-        if (actionType === "REWIND") video.currentTime -= 10
+        if (actionType === 'FORWARD') video.currentTime += 10
+        if (actionType === 'REWIND') video.currentTime -= 10
     }
 
     const toggleFullScreen = () => {
         const video = videoRef.current
 
-        if (!video) {
-            // showLogMessage(showLogs, 'video element not mounted on DOM', 'ERROR')
-            return
-        }
+        if (!video) return
 
         if (isFullScreen) document.exitFullscreen()
         else video.requestFullscreen()
@@ -204,27 +178,20 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ muted, autoPlay, drmSystemConfig
         const seekTime = event.target.value
         const video = videoRef.current
 
-        if (!video) {
-            // showLogMessage(showLogs, 'video element not mounted on DOM', 'ERROR')
-            return
-        }
+        if (!video) return
 
         video.currentTime = seekTime
 
         setCurrentTimeInt(seekTime)
         setCurrentTimeInt(video.currentTime)
         setRemainingDuration(formatDuration(video.duration - video.currentTime))
-        // setCurrentTime(formatDuration(seekTime))
     }
 
     const handleChangeVolume = (event: ChangeEvent<HTMLInputElement>) => {
         const video = videoRef.current
         const volumeLevel_ = Number(event.target.value) / 100
 
-        if (!video) {
-            // showLogMessage(showLogs, 'video element not mounted on DOM', 'ERROR')
-            return
-        }
+        if (!video) return
 
         setVolumeLevel(volumeLevel_ * 100)
         video.volume = volumeLevel_
@@ -245,18 +212,22 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ muted, autoPlay, drmSystemConfig
                 </div>}
 
                 <span>
-                    <video poster={poster} autoPlay={autoPlay} muted={muted} onClick={showControlsOnHoverOrClick} onMouseMove={showControlsOnHoverOrClick} ref={videoRef} className={styles.playerVideo} src={source}>
+                    <video
+                        onClick={showControlsOnHoverOrClick}
+                        onMouseMove={showControlsOnHoverOrClick}
+                        ref={videoRef}
+                        className={styles.playerVideo}
+                        src={source}
+                        {...videoProps}>
                         Your browser does not support the video tag.
                     </video>
-
                     {showControls_ &&
                         <div className={styles.playerControls}>
                             <div className={styles.playerControlsMainWrapper}>
                                 <div className={styles.playerProgressRangeWrapper}>
-                                    <input type="range" min="0" max={durationInt} value={currentTimeInt} onChange={handleProgress} className={styles.playerProgressRange} />
+                                    <input type='range' min='0' max={durationInt} value={currentTimeInt} onChange={handleProgress} className={styles.playerProgressRange} />
                                     <small>{remainingduration === '00:00' ? duration : remainingduration}</small>
                                 </div>
-
                                 <div className={styles.playerControlsWrapper}>
                                     <div className={styles.playerControlCol}>
                                         <div className={styles.playerControlCol}>
@@ -266,17 +237,17 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ muted, autoPlay, drmSystemConfig
                                                     : <button><IoPlay size={30} /></button>}
                                             </span>
                                         </div>
-                                        <button><MdReplay10 onClick={() => handleForwardRewind("REWIND")} size={30} /></button>
-                                        <button><MdOutlineForward10 onClick={() => handleForwardRewind("FORWARD")} size={30} /></button>
+                                        <button><MdReplay10 onClick={() => handleForwardRewind('REWIND')} size={30} /></button>
+                                        <button><MdOutlineForward10 onClick={() => handleForwardRewind('FORWARD')} size={30} /></button>
                                         <div className={styles.playerVolumeColWrapper} onMouseLeave={() => setShowVolumeSlider(false)} onMouseEnter={() => setShowVolumeSlider(true)} onClick={() => setShowVolumeSlider(true)} >
                                             {volumeLevel > 0 && volumeLevel < 70 && <button><ImVolumeLow size={26} /></button>}
                                             {volumeLevel >= 70 && volumeLevel < 100 && <button><ImVolumeMedium size={26} /></button>}
                                             {volumeLevel === 0 && <button><ImVolumeMute2 size={26} /></button>}
                                             {volumeLevel === 100 && <button><ImVolumeHigh size={26} /></button>}
-                                            {showVolumeSlider && <input type="range" value={volumeLevel} onChange={handleChangeVolume} className={styles.playerVolumeProgressRange} />}
+                                            {showVolumeSlider && <input type='range' value={volumeLevel} onChange={handleChangeVolume} className={styles.playerVolumeProgressRange} />}
                                         </div>
                                     </div>
-                                    <p className={styles.playerTitle}>{title}</p>
+                                    <p className={styles.playerTitle}>{videoTitle}</p>
                                     <div className={styles.playerControlCol}>
                                         {!isStaticVideo && qualities.length > 0 && (
                                             <select value={selectedQuality} onChange={handleQualityChange} className={styles.playerQualitySelector}>
@@ -287,7 +258,6 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ muted, autoPlay, drmSystemConfig
                                                 ))}
                                             </select>
                                         )}
-
                                         <button><RxEnterFullScreen onClick={toggleFullScreen} size={25} /></button>
                                     </div>
                                 </div>

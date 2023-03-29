@@ -8,8 +8,8 @@ const App = () => {
     poster='http://cdn.bongobd.com/upload/content/landscape/hd/O1rJFgE8KTD.jpg'
     isStaticVideo={false}
     showLogs={true}
-    title="Tears of steel"
-    showControls={false}
+    videoTitle="Tears of steel"
+    showControls={true}
     autoPlay={true}
     muted={true}
     drmSystemConfig={

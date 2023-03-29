@@ -1,14 +1,10 @@
-export interface IProPlayerProps {
-    source: string // url of video
-    poster?: string // video poster
-    showLogs?: boolean // show logs in console
-    isStaticVideo: boolean // whether or not video source passed is for a static video or HLS/DASH
-    theme?: string
+export interface IProPlayerProps extends React.VideoHTMLAttributes<HTMLVideoElement> {
+    isStaticVideo: boolean
+    showLogs?: boolean
     showControls?: boolean
-    title?: string
-    autoPlay?: boolean
-    muted?: boolean
     drmSystemConfig?: TDrmSystemConfig
+    source: string
+    videoTitle?: string
 }
 
 type TDrmSystemConfig = {
@@ -16,8 +12,7 @@ type TDrmSystemConfig = {
         licenseUrl: string;
         serverCertificateUrl?: string;
     };
-};
-
+}
 
 export interface IHTMLVideoElement extends HTMLVideoElement {
     hls: any
