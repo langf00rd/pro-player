@@ -1,6 +1,37 @@
 input[type='range'] {
   height: 4px;
+  border: none;
 }
+
+/* input[type='range']::-webkit-slider-runnable-track {
+  background: white;
+} */
+
+/* input[type='range']::-webkit-slider-thumb {
+  background: white;
+  filter: hue-rotate(100deg);
+} */
+
+/* For WebKit-based browsers */
+/* input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background-color: #ccc;
+  border: none;
+  border-radius: 50%;
+} 
+input[type='range']::-moz-range-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background-color: #ccc;
+  border: none;
+  border-radius: 50%;
+}
+*/
 
 .playerContainer * {
   outline: none;
@@ -33,8 +64,7 @@ input[type='range'] {
   display: flex;
   align-items: center;
   gap: 5;
-  margin-top: -10px;
-  /* background: red; */
+  margin-bottom: 5px;
 }
 
 .playerProgressRange {
@@ -62,7 +92,6 @@ input[type='range'] {
   width: 100%;
   background: #00000063;
   padding: 10px 0;
-  /* padding-top: 8px; */
 }
 
 .playerControlsMainWrapper {
@@ -71,17 +100,14 @@ input[type='range'] {
   margin: auto;
   position: relative;
   left: -3px;
-  /* background: red; */
 }
 
 .playerControlsWrapper {
   display: flex;
   align-items: center;
   gap: 20px;
-  /* padding: 3px 0; */
-  margin-top: -10px;
+  /* margin-top: -10px; */
   justify-content: space-between;
-  /* background: green; */
 }
 
 .playerControlIcons {
@@ -98,12 +124,14 @@ input[type='range'] {
 }
 
 .playerQualitySelector {
-  background-color: transparent;
-  /* color: #fff; */
-  font-size: 14px;
+  background: transparent;
+  color: white;
   border: none;
   cursor: pointer;
-  color: white;
+}
+
+.playerQualitySelector option {
+  color: black;
 }
 
 .playerContainerOverlay {
@@ -117,7 +145,6 @@ input[type='range'] {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* color: white; */
 }
 
 .playerContainerOverlaySpinner {

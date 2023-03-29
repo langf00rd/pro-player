@@ -6,6 +6,8 @@ export interface IProPlayerProps {
     theme?: string
     showControls?: boolean
     title?: string
+    autoPlay?: boolean
+    muted?: boolean
     drmSystemConfig?: TDrmSystemConfig
 }
 

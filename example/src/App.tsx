@@ -9,7 +9,9 @@ const App = () => {
     isStaticVideo={false}
     showLogs={true}
     title="Tears of steel"
-    showControls
+    showControls={false}
+    autoPlay={true}
+    muted={true}
     drmSystemConfig={
       {
         'com.apple.fps': {

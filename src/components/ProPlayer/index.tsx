@@ -2,14 +2,15 @@ import Hls from "hls.js"
 import React, { ChangeEvent } from "react"
 import { SUPPORTED_MIME_TYPES } from "../../constants"
 import { IHTMLVideoElement, IProPlayerProps } from "../../types"
-import { BiInfoSquare, BiLoader, BiPause, BiPlay } from "react-icons/bi"
-import { MdFullscreen, MdOutlineForward10, MdReplay10 } from "react-icons/md"
+import { BiInfoSquare, BiLoader } from "react-icons/bi"
+import { IoPause, IoPlay } from "react-icons/io5"
+import { MdOutlineForward10, MdReplay10 } from "react-icons/md"
+import { RxEnterFullScreen } from "react-icons/rx"
 import { ImVolumeMedium, ImVolumeLow, ImVolumeHigh, ImVolumeMute2 } from "react-icons/im"
 import { formatDuration } from "../../utils/formatDuration.util"
 import styles from "../../styles.module.css"
-// import { showLogMessage } from "../../utils/showLogMessage.util"
 
-const ProPlayer: React.FC<IProPlayerProps> = ({ drmSystemConfig, title, source, showControls, isStaticVideo, poster }) => {
+const ProPlayer: React.FC<IProPlayerProps> = ({ muted, autoPlay, drmSystemConfig, title, source, showControls, isStaticVideo, poster }) => {
     const videoRef = React.useRef<IHTMLVideoElement>(null)
     const [isPlaying, setIsPlaying] = React.useState<boolean>(false)
     const [loading, setLoading] = React.useState<boolean>(true)
@@ -34,6 +35,12 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ drmSystemConfig, title, source, 
         else setShowControls_(false)
     }, [showControls])
 
+    React.useEffect(() => {
+        setTimeout(() => {
+            setShowControls_(false)
+        }, 5000);
+    }, [showControls_])
+
     function onPlayerLoad() {
         if (!source) {
             setLogMessage('video source not provided')
@@ -54,6 +61,7 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ drmSystemConfig, title, source, 
         } else {
             // set up player for HLS URL
             if (Hls.isSupported()) {
+
                 const hls = new Hls({ drmSystems: drmSystemConfig })
 
                 // showLogMessage(showLogs, "hls supported", 'LOG')
@@ -105,12 +113,25 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ drmSystemConfig, title, source, 
         // showLogMessage(showLogs, 'loading metadata...', 'LOG')
 
         video.addEventListener('loadedmetadata', () => {
-            setIsPlaying(video.paused)
-            setDuration(formatDuration(video.duration))
-            setDurationInt(video.duration)
-            setLoading(false)
-            setVolumeLevel(30)
-            video.volume = 30 / 100
+            setTimeout(() => {
+                if (autoPlay === true) {
+                    video.muted = muted || false
+                    // video.play()
+
+                    document.body.addEventListener('load', function () {
+                        video.play()
+                    })
+                }
+
+                setIsPlaying(!video.paused)
+                setDuration(formatDuration(video.duration))
+                setDurationInt(video.duration)
+                setLoading(false)
+                setVolumeLevel(30)
+                video.volume = 30 / 100
+            }, 2000);
+
+
         })
 
         video.addEventListener("timeupdate", () => {
@@ -136,23 +157,10 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ drmSystemConfig, title, source, 
         // };
     }
 
-    // function listenForMouseMoveOverVideoElement() {
-    //     const videoPlayerElement = document.querySelector('.playerVideo')
-
-    //     if (!videoPlayerElement) return
-
-    //     videoPlayerElement.addEventListener('mousemove', () => {
-    //         setShowControls_(true)
-    //     })
-    // }
-
-    // function toggleShowVideoControls() {
-    //     const timeoutId = setTimeout(() => {
-    //         // setShowControls_(false)
-    //     }, 5000)
-
-    //     return () => { clearTimeout(timeoutId) }
-    // }
+    const showControlsOnHoverOrClick = () => {
+        if (showControls === false) return
+        setShowControls_(true)
+    }
 
     const handlePlayPause = () => {
         const video = videoRef.current
@@ -209,9 +217,6 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ drmSystemConfig, title, source, 
         // setCurrentTime(formatDuration(seekTime))
     }
 
-    const onVideoElementHover = () => {
-    }
-
     const handleChangeVolume = (event: ChangeEvent<HTMLInputElement>) => {
         const video = videoRef.current
         const volumeLevel_ = Number(event.target.value) / 100
@@ -240,7 +245,7 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ drmSystemConfig, title, source, 
                 </div>}
 
                 <span>
-                    <video poster={poster} onMouseEnter={onVideoElementHover} ref={videoRef} autoPlay className={styles.playerVideo} src={source}>
+                    <video poster={poster} autoPlay={autoPlay} muted={muted} onClick={showControlsOnHoverOrClick} onMouseMove={showControlsOnHoverOrClick} ref={videoRef} className={styles.playerVideo} src={source}>
                         Your browser does not support the video tag.
                     </video>
 
@@ -249,7 +254,7 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ drmSystemConfig, title, source, 
                             <div className={styles.playerControlsMainWrapper}>
                                 <div className={styles.playerProgressRangeWrapper}>
                                     <input type="range" min="0" max={durationInt} value={currentTimeInt} onChange={handleProgress} className={styles.playerProgressRange} />
-                                    <p>{remainingduration === '00:00' ? duration : remainingduration}</p>
+                                    <small>{remainingduration === '00:00' ? duration : remainingduration}</small>
                                 </div>
 
                                 <div className={styles.playerControlsWrapper}>
@@ -257,8 +262,8 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ drmSystemConfig, title, source, 
                                         <div className={styles.playerControlCol}>
                                             <span onClick={handlePlayPause}>
                                                 {isPlaying
-                                                    ? <button><BiPause size={33} /></button>
-                                                    : <button><BiPlay size={33} /></button>}
+                                                    ? <button><IoPause size={30} /></button>
+                                                    : <button><IoPlay size={30} /></button>}
                                             </span>
                                         </div>
                                         <button><MdReplay10 onClick={() => handleForwardRewind("REWIND")} size={30} /></button>
@@ -283,7 +288,7 @@ const ProPlayer: React.FC<IProPlayerProps> = ({ drmSystemConfig, title, source, 
                                             </select>
                                         )}
 
-                                        <button><MdFullscreen onClick={toggleFullScreen} size={30} /></button>
+                                        <button><RxEnterFullScreen onClick={toggleFullScreen} size={25} /></button>
                                     </div>
                                 </div>
                             </div>
