@@ -1,6 +1,7 @@
+import React from "react";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Hls, { Level } from "hls.js";
-import "./video.css";
+// import "./video.css";
 
 interface VideoProps extends HTMLVideoElement {
   drmSystemConfig?: object;
@@ -67,7 +68,7 @@ const Video = ({ drmSystemConfig, ...props }: VideoProps): JSX.Element => {
 
   return (
     <div className="video-player-wrapper">
-      <video ref={videoRef} {...props}></video>
+      {/* <video ref={videoRef} {...props}></video> */}
       {bitRates && (
         <select
           className="bitrate-select"

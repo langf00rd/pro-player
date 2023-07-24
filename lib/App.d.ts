@@ -1,6 +1,3 @@
 import React from "react";
-function App() {
-  return <div></div>;
-}
-
+declare function App(): React.JSX.Element;
 export default App;
