@@ -1,29 +1,30 @@
 {
-  "compilerOptions": {
-    "outDir": "lib",
-    "module": "esnext",
-    "target": "esnext",
-    "lib": [
-      "esnext",
-      "dom"
-    ],
-    "sourceMap": true,
-    "allowJs": true,
-    "moduleResolution": "node",
-    "jsx": "react",
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "noUnusedParameters": true,
-    "declaration": true,
-    "allowSyntheticDefaultImports": true
-  },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules",
-    "lib"
-  ]
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "declaration": true,
+        "esModuleInterop": true,
+        "jsx": "react",
+        "lib": [
+            "ES5",
+            "ES2015",
+            "ES2016",
+            "DOM",
+            "ESNext"
+        ],
+        "types": [
+            "node"
+        ],
+        "module": "es2015",
+        "moduleResolution": "node",
+        "noImplicitAny": false,
+        "noUnusedLocals": true,
+        "outDir": "dist/esm",
+        "sourceMap": true,
+        "strict": true,
+        "target": "ES6"
+    },
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.tsx"
+    ]
 }
