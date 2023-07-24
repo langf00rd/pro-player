@@ -10,13 +10,7 @@ export default meta;
 type Story = StoryObj<typeof Player>;
 
 export const Default: Story = {
-  render: ({ ...props }) => (
-    <Player
-      {...props}
-      controls
-      src="https://live-par-2-abr.livepush.io/vod/bigbuckbunny/index.m3u8"
-    />
-  ),
+  render: ({ ...props }) => <Player {...props} />,
 };
 
 // https://live-par-2-abr.livepush.io/vod/bigbuckbunny/index.m3u8

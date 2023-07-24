@@ -9,6 +9,7 @@ const Player = ({ drmSystemConfig, ...props }: PlayerProps): JSX.Element => {
 
   useEffect(() => {
     const video = videoRef.current;
+
     if (!video) {
       console.log("video player not mounted");
       return;
@@ -19,8 +20,8 @@ const Player = ({ drmSystemConfig, ...props }: PlayerProps): JSX.Element => {
       return;
     }
 
-    console.log(video);
-    console.log(video.src);
+    console.log("video element ->", video);
+    console.log("video src ->", video.src);
 
     if (Hls.isSupported()) onHLSSupported(video);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -42,14 +43,15 @@ const Player = ({ drmSystemConfig, ...props }: PlayerProps): JSX.Element => {
     setSelectedBitRate(hls.levels.length - 1);
   }
 
-  console.log(bitRates);
-  console.log(selectedBitRate);
-
   const onBitRateChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const newBitRate = parseInt(event.target.value);
     const video = videoRef.current;
 
-    if (!video) return;
+    if (!video) {
+      console.log("video player not mounted");
+      return;
+    }
+
     if (video.readyState === video.HAVE_ENOUGH_DATA) {
       const hls = video.hls;
       if (hls && hls.levels[newBitRate]) {
@@ -62,7 +64,7 @@ const Player = ({ drmSystemConfig, ...props }: PlayerProps): JSX.Element => {
 
   return (
     <div className="video-player-wrapper">
-      <video ref={videoRef} {...props}></video>
+      <video ref={videoRef} src={props.src} {...props}></video>
       {bitRates && (
         <select
           className="bitrate-select"
