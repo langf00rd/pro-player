@@ -1,8 +1,6 @@
-import React from "react";
-
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import Hls, { Level } from "hls.js";
-import { IHTMLVideoElement, PlayerProps } from "../interfaces";
+import { IHTMLVideoElement, PlayerProps } from "./interfaces";
 
 const Player = ({ drmSystemConfig, ...props }: PlayerProps): JSX.Element => {
   const videoRef = useRef<IHTMLVideoElement>(null);

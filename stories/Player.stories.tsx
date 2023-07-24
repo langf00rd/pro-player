@@ -1,6 +1,6 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import Player from "../src/components/Player";
+import Player from "../src";
 
 const meta: Meta<typeof Player> = {
   component: Player,

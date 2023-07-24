@@ -9,8 +9,7 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-import React from "react";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Hls from "hls.js";
 const Player = (_a) => {
     var { drmSystemConfig } = _a, props = __rest(_a, ["drmSystemConfig"]);
