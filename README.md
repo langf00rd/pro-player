@@ -1,63 +1,27 @@
-# Pro Player
+# React + TypeScript + Vite
 
-> An advanced React video player component that allows you to play HLS (m3u8) files and supports DRM. It provides a customizable video player with lots of features including a quality selector.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-[![NPM](https://img.shields.io/npm/v/pro-player.svg)](https://www.npmjs.com/package/pro-player) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+Currently, two official plugins are available:
 
-# Installation
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-You can install pro-player using npm or yarn.
+## Expanding the ESLint configuration
 
-## NPM
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-```bash
-npm install pro-player
+- Configure the top-level `parserOptions` property like this:
+
+```js
+   parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    project: ['./tsconfig.json', './tsconfig.node.json'],
+    tsconfigRootDir: __dirname,
+   },
 ```
 
-## Yarn
-
-```bash
-yarn add pro-player
-```
-
-# Usage
-
-First, import pro-player and its stylesheet into your project:
-
-```jsx
-import React from 'react'
-import ProPlayer from 'pro-player'
-import 'pro-player/dist/index.css'
-```
-
-Then, you can use the ProPlayer component in your app by passing in the source, poster, drmSystemConfig, etc props:
-
-```jsx
-const App = () => {
-  return (
-    <ProPlayer
-      source='HLS_URL'
-      poster='POSTER_URL'
-      drmSystemConfig={{
-        'com.apple.fps': {
-          licenseUrl: 'LICENSE_URL',
-          serverCertificateUrl: 'SERVER_CERTIFICATE_URL'
-        },
-        'com.widevine.alpha': {
-          licenseUrl: 'LICENSE_URL'
-        }
-      }}
-    />
-  )
-}
-
-export default App
-```
-
-# Contributing
-
-Contributions are welcome! If you'd like to contribute to pro-player, please submit a pull request with your changes.
-
-## License
-
-MIT © [langford-dev](https://github.com/langford-dev)
+- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
+- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
