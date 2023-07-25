@@ -1,6 +1,6 @@
 {
   "name": "pro-player",
-  "version": "0.0.9",
+  "version": "1.0.6",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
