@@ -3,7 +3,7 @@ import React, { ChangeEvent, useEffect } from "react";
 import { IHTMLVideoElement, PlayerProps } from "./interfaces";
 import { SUPPORTED_MIME_TYPES } from "./constants";
 
-const Player = ({ drmSystemConfig, ...props }: PlayerProps) => {
+const Player = ({ drmSystemConfig, showBitrateSelector, ...props }: PlayerProps) => {
   const videoRef = React.useRef<IHTMLVideoElement>(null);
   const [selectedBitRate, setSelectedBitRate] = React.useState<number>(0);
   const [bitRates, setBitRates] = React.useState<number[]>([]);
@@ -55,15 +55,15 @@ const Player = ({ drmSystemConfig, ...props }: PlayerProps) => {
   };
 
   return (
-    <div className="pro-video-player-wrapper">
-      <video ref={videoRef} {...props} className="pro-video-player">
+    <div id="pro-video-player-wrapper">
+      <video ref={videoRef} {...props} id="pro-video-player">
         Your browser does not support the video tag.
       </video>
-      {bitRates.length > 0 && (
+      {showBitrateSelector && bitRates.length > 0 && (
         <select
           value={selectedBitRate}
           onChange={onBitRateChanged}
-          className="pro-bitrate-select"
+          id="pro-bitrate-select"
         >
           {bitRates.map((quality, index) => (
             <option key={index} value={index}>

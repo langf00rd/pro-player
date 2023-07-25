@@ -3,6 +3,7 @@ import { VideoHTMLAttributes } from "react";
 
 export interface PlayerProps extends VideoHTMLAttributes<HTMLVideoElement> {
   drmSystemConfig?: TDrmSystemConfig;
+  showBitrateSelector?: boolean;
 }
 
 type TDrmSystemConfig = {
