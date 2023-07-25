@@ -14,5 +14,4 @@ type TDrmSystemConfig = {
 
 export interface IHTMLVideoElement extends HTMLVideoElement {
   hls: Hls;
-  requestPictureInPicture(): Promise<PictureInPictureWindow>;
 }

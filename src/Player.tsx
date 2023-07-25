@@ -1,54 +1,48 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-import Hls, { Level } from "hls.js";
+import Hls from "hls.js";
+import React, { ChangeEvent, useEffect } from "react";
 import { IHTMLVideoElement, PlayerProps } from "./interfaces";
+import { SUPPORTED_MIME_TYPES } from "./constants";
 
-const Player = ({ drmSystemConfig, ...props }: PlayerProps): JSX.Element => {
-  const videoRef = useRef<IHTMLVideoElement>(null);
-  const [bitRates, setBitRates] = useState<number[]>([]);
-  const [selectedBitRate, setSelectedBitRate] = useState<number>(0);
+const Player = ({ drmSystemConfig, ...props }: PlayerProps) => {
+  const videoRef = React.useRef<IHTMLVideoElement>(null);
+  const [selectedBitRate, setSelectedBitRate] = React.useState<number>(0);
+  const [bitRates, setBitRates] = React.useState<number[]>([]);
 
   useEffect(() => {
     const video = videoRef.current;
 
     if (!video) {
-      console.log("video player not mounted");
+      console.error("video player element not mounted", video);
       return;
     }
 
-    if (!video.src) {
-      console.log("no video source passed", props);
+    if (!props.src) {
+      console.error("could not find video source", props.src);
       return;
     }
 
-    console.log("video element ->", video);
-    console.log("video src ->", video.src);
-
-    if (Hls.isSupported()) onHLSSupported(video);
+    if (Hls.isSupported()) {
+      const hls = new Hls({ drmSystems: drmSystemConfig });
+      video.hls = hls;
+      hls.loadSource(props.src);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        let bitRates_ = hls.levels.map((level: any) => level.height);
+        setBitRates(bitRates_);
+        setSelectedBitRate(bitRates_.length - 1);
+      });
+    } else if (video.canPlayType(SUPPORTED_MIME_TYPES[0])) video.src = props.src;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function onHLSSupported(video: IHTMLVideoElement) {
-    const hls = new Hls({ drmSystems: drmSystemConfig });
-    video.hls = hls;
-    hls.loadSource(video.src);
-    hls.attachMedia(video);
-    hls.on(Hls.Events.MANIFEST_PARSED, () => {
-      loadBitRates(hls);
-    });
-  }
-
-  function loadBitRates(hls: Hls) {
-    const bitRateLevels = hls.levels.map((level: Level) => level.height);
-    setBitRates(bitRateLevels);
-    setSelectedBitRate(hls.levels.length - 1);
-  }
-
-  const onBitRateChange = (event: ChangeEvent<HTMLSelectElement>) => {
+  const onBitRateChanged = (event: ChangeEvent<HTMLSelectElement>) => {
     const newBitRate = parseInt(event.target.value);
     const video = videoRef.current;
 
+    setSelectedBitRate(newBitRate);
+
     if (!video) {
-      console.log("video player not mounted");
+      console.error("video player element not mounted");
       return;
     }
 
@@ -58,22 +52,22 @@ const Player = ({ drmSystemConfig, ...props }: PlayerProps): JSX.Element => {
         hls.currentLevel = newBitRate;
       }
     }
-
-    setSelectedBitRate(newBitRate);
   };
 
   return (
-    <div className="video-player-wrapper">
-      <video ref={videoRef} src={props.src} {...props}></video>
-      {bitRates && (
+    <div className="pro-video-player-wrapper">
+      <video ref={videoRef} {...props} className="pro-video-player">
+        Your browser does not support the video tag.
+      </video>
+      {bitRates.length > 0 && (
         <select
-          className="bitrate-select"
           value={selectedBitRate}
-          onChange={onBitRateChange}
+          onChange={onBitRateChanged}
+          className="pro-bitrate-select"
         >
-          {bitRates.map((bitRate: number, index: number) => (
+          {bitRates.map((quality, index) => (
             <option key={index} value={index}>
-              {bitRate}p
+              {quality}p
             </option>
           ))}
         </select>
